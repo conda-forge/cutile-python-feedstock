@@ -16,7 +16,6 @@ source:
 build:
   number: 0
   skip:
-    - true
     - osx
     - win
     - cuda_compiler_version == "None"
@@ -79,4 +78,5 @@ about:
 
 extra:
   recipe-maintainers:
-    - bdice
+    - conda-forge/cuda
+    - conda-forge/cuda-python
