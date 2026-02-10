@@ -89,3 +89,4 @@ extra:
   recipe-maintainers:
     - conda-forge/cuda
     - conda-forge/cuda-python
+    - haijieg
