@@ -28,6 +28,7 @@ build:
         - export CUDA_TILE_CMAKE_DLPACK_PATH=${PREFIX}
     - if: win
       then:
+        - export CUDAToolkit_ROOT=%PREFIX%\Library
         - set CUDA_TILE_CMAKE_DLPACK_PATH=%PREFIX%
     - python -m pip install . -vv
 
