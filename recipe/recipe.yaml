@@ -18,7 +18,12 @@ build:
     - osx
     - win
   script:
-    - export CUDAToolkit_ROOT=${PREFIX}/targets/x86_64-linux
+    - if: linux and x86_64
+      then:
+        - export CUDAToolkit_ROOT=${PREFIX}/targets/x86_64-linux
+    - if: linux and aarch64
+      then:
+        - export CUDAToolkit_ROOT=${PREFIX}/targets/sbsa-linux
     - export CUDA_TILE_CMAKE_DLPACK_PATH=${PREFIX}
     - python -m pip install . -vv
 
