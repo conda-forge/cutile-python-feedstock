@@ -73,7 +73,12 @@ tests:
       site_packages:
         - cuda.tile
       files:
-        - lib/python*/site-packages/cuda/tile/_cext*.so
+        - if: linux
+          then:
+            - lib/python*/site-packages/cuda/tile/_cext*.so
+        - if: win
+          then:
+            - Lib\site-packages\cuda\tile\_cext*.pyd
   - requirements:
       run:
         - pip
