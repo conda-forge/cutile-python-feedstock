@@ -10,8 +10,7 @@ source:
   url: https://github.com/NVIDIA/cutile-python/archive/refs/tags/v${{ version }}.tar.gz
   sha256: 198e5c8acb11a68dd574850300502200b36b72cf17508ed34c0c1d33f285b9d0
   patches:
-    - patches/0001-Use-standard-CMake-FindCUDAToolkit-module.patch
-    - patches/0002-Remove-nostdlib-flags-to-allow-linking-glibc.patch
+    - patches/0001-Remove-nostdlib-flags-to-allow-linking-glibc.patch
 
 build:
   number: 0
@@ -19,8 +18,7 @@ build:
     - osx
     - win
   script:
-    - export CUDAToolkit_INCLUDE_DIR=${PREFIX}/targets/x86_64-linux/include
-    - export CUDAToolkit_LIBRARY_DIR=${PREFIX}/targets/x86_64-linux/lib
+    - export CUDAToolkit_ROOT=${PREFIX}/targets/x86_64-linux
     - export CUDA_TILE_CMAKE_DLPACK_PATH=${PREFIX}
     - python -m pip install . -vv
 
