@@ -12,10 +12,20 @@ conflict with conda-forge's compiler flags (e.g. -fstack-protector).
  1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/cext/CMakeLists.txt b/cext/CMakeLists.txt
-index 7e032f5..59d3b7b 100644
+index 7e032f5..a40b0ce 100644
 --- a/cext/CMakeLists.txt
 +++ b/cext/CMakeLists.txt
-@@ -36,19 +36,19 @@ add_library(_cext_static STATIC
+@@ -10,8 +10,7 @@ if (MSVC)
+     # Default visibility is already hidden
+     string(REPLACE "/EHsc" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+     set(cext_compile_flags /GR- /GS- /EHs- -DNDEBUG)
+-    # /NODEFAULTLIB and /NOENTRY to disable dependency on runtime lib msvcrt.dll
+-    set(cext_link_flags /NODEFAULTLIB /NOENTRY)
++    set(cext_link_flags "")
+ else()
+     set(cext_compile_flags -fno-exceptions -fno-rtti -fPIC -fvisibility=hidden)
+     set(cext_link_flags ${cext_compile_flags})
+@@ -36,19 +35,19 @@ add_library(_cext_static STATIC
      tile_kernel.cpp
      )
  
@@ -39,7 +49,7 @@ index 7e032f5..59d3b7b 100644
  
  set_target_properties(_cext PROPERTIES SKIP_BUILD_RPATH TRUE)
  
-@@ -65,9 +65,9 @@ endif()
+@@ -65,9 +64,9 @@ endif()
  
  add_library(_cext_shared SHARED module.cpp)
  target_link_libraries(_cext_shared _cext_static ${Python_LIBRARIES} ${asan_library})
