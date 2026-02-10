@@ -23,7 +23,12 @@ build:
     - if: linux and aarch64
       then:
         - export CUDAToolkit_ROOT=${PREFIX}/targets/sbsa-linux
-    - export CUDA_TILE_CMAKE_DLPACK_PATH=${PREFIX}
+    - if: linux
+      then:
+        - export CUDA_TILE_CMAKE_DLPACK_PATH=${PREFIX}
+    - if: win
+      then:
+        - set CUDA_TILE_CMAKE_DLPACK_PATH=%PREFIX%
     - python -m pip install . -vv
 
 requirements:
@@ -41,7 +46,8 @@ requirements:
     - wheel
     - cuda-version >=13.1
     - cuda-cudart-dev
-    - cuda-driver-dev
+    - if: linux
+      then: cuda-driver-dev
     - dlpack >=1.1
   run:
     - cuda-tileiras
