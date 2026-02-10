@@ -53,7 +53,7 @@ requirements:
     - cuda-tileiras
     - python
     - typing-extensions
-    - ${{ pin_compatible("cuda-version", min_pin="x", max_pin="x") }}
+    - ${{ pin_compatible("cuda-version", lower_bound="x", upper_bound="x") }}
   run_constraints:
     # Requires CUDA driver >=580
     - __cuda >=13.0
