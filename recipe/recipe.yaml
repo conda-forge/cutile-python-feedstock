@@ -18,23 +18,24 @@ build:
   skip:
     - osx
     - win
-    - cuda_compiler_version == "None"
   script:
-    - export CUDA_TILE_CMAKE_DLPACK_PATH=$PREFIX
+    - export CUDAToolkit_INCLUDE_DIR=${PREFIX}/targets/x86_64-linux/include
+    - export CUDAToolkit_LIBRARY_DIR=${PREFIX}/targets/x86_64-linux/lib
+    - export CUDA_TILE_CMAKE_DLPACK_PATH=${PREFIX}
     - python -m pip install . -vv
 
 requirements:
   build:
     - ${{ compiler('c') }}
     - ${{ compiler('cxx') }}
-    - ${{ compiler('cuda') }}
     - ${{ stdlib('c') }}
     - cmake >=3.18
     - make
   host:
     - python
     - pip
-    - setuptools
+    # setuptools 81 removed dry_run from distutils.file_util.copy_file
+    - setuptools <81
     - wheel
     - cuda-version >=13.1
     - cuda-cudart-dev
