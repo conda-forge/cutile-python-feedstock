@@ -57,6 +57,11 @@ requirements:
   run_constraints:
     # Requires CUDA driver >=580
     - __cuda >=13.0
+  ignore_run_exports:
+    from_package:
+      - cuda-cudart-dev
+    by_name:
+      - cuda-version
 
 tests:
   - python:
