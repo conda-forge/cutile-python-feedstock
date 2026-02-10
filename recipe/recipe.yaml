@@ -29,7 +29,7 @@ build:
     - if: win
       then:
         - set CUDAToolkit_ROOT=%PREFIX%\Library
-        - set CUDA_TILE_CMAKE_DLPACK_PATH=%PREFIX%
+        - set CUDA_TILE_CMAKE_DLPACK_PATH=%PREFIX%\Library
     - python -m pip install . -vv
 
 requirements:
