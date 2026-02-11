@@ -13,18 +13,18 @@ source:
     - patches/0001-Remove-nostdlib-flags-to-allow-linking-glibc.patch
 
 build:
-  number: 0
+  number: 1
   skip:
     - osx
   script:
-    - if: linux and x86_64
-      then:
-        - export CUDAToolkit_ROOT=${PREFIX}/targets/x86_64-linux
-    - if: linux and aarch64
-      then:
-        - export CUDAToolkit_ROOT=${PREFIX}/targets/sbsa-linux
     - if: linux
       then:
+        - if: x86_64
+          then:
+            - export CUDAToolkit_ROOT=${PREFIX}/targets/x86_64-linux
+        - if: aarch64
+          then:
+            - export CUDAToolkit_ROOT=${PREFIX}/targets/sbsa-linux
         - export CUDA_TILE_CMAKE_DLPACK_PATH=${PREFIX}
     - if: win
       then:
