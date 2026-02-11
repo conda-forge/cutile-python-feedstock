@@ -30,6 +30,7 @@ build:
       then:
         - set CUDAToolkit_ROOT=%PREFIX%\Library
         - set CUDA_TILE_CMAKE_DLPACK_PATH=%PREFIX%\Library
+        - set Python_ROOT_DIR=%PREFIX%
     - python -m pip install . -vv
 
 requirements:
