@@ -10,44 +10,60 @@ source:
   url: https://github.com/NVIDIA/cutile-python/archive/refs/tags/v${{ version }}.tar.gz
   sha256: 198e5c8acb11a68dd574850300502200b36b72cf17508ed34c0c1d33f285b9d0
   patches:
-    - patches/0001-Use-standard-CMake-FindCUDAToolkit-module.patch
-    - patches/0002-Remove-nostdlib-flags-to-allow-linking-glibc.patch
+    - patches/0001-Remove-nostdlib-flags-to-allow-linking-glibc.patch
 
 build:
   number: 0
   skip:
-    - true
     - osx
-    - win
-    - cuda_compiler_version == "None"
   script:
-    - export CUDA_TILE_CMAKE_DLPACK_PATH=$PREFIX
+    - if: linux and x86_64
+      then:
+        - export CUDAToolkit_ROOT=${PREFIX}/targets/x86_64-linux
+    - if: linux and aarch64
+      then:
+        - export CUDAToolkit_ROOT=${PREFIX}/targets/sbsa-linux
+    - if: linux
+      then:
+        - export CUDA_TILE_CMAKE_DLPACK_PATH=${PREFIX}
+    - if: win
+      then:
+        - set CUDAToolkit_ROOT=%PREFIX%\Library
+        - set CUDA_TILE_CMAKE_DLPACK_PATH=%PREFIX%\Library
+        - set Python_ROOT_DIR=%PREFIX%
     - python -m pip install . -vv
 
 requirements:
   build:
     - ${{ compiler('c') }}
     - ${{ compiler('cxx') }}
-    - ${{ compiler('cuda') }}
     - ${{ stdlib('c') }}
     - cmake >=3.18
     - make
   host:
     - python
     - pip
-    - setuptools
+    # setuptools 81 removed dry_run from distutils.file_util.copy_file
+    - setuptools <81
     - wheel
     - cuda-version >=13.1
     - cuda-cudart-dev
-    - cuda-driver-dev
+    - if: linux
+      then: cuda-driver-dev
     - dlpack >=1.1
   run:
     - cuda-tileiras
     - python
     - typing-extensions
+    - ${{ pin_compatible("cuda-version", lower_bound="x", upper_bound="x") }}
   run_constraints:
     # Requires CUDA driver >=580
     - __cuda >=13.0
+  ignore_run_exports:
+    from_package:
+      - cuda-cudart-dev
+    by_name:
+      - cuda-version
 
 tests:
   - python:
@@ -58,7 +74,12 @@ tests:
       site_packages:
         - cuda.tile
       files:
-        - lib/python*/site-packages/cuda/tile/_cext*.so
+        - if: linux
+          then:
+            - lib/python*/site-packages/cuda/tile/_cext*.so
+        - if: win
+          then:
+            - Lib\site-packages\cuda\tile\_cext*.pyd
   - requirements:
       run:
         - pip
@@ -79,4 +100,6 @@ about:
 
 extra:
   recipe-maintainers:
-    - bdice
+    - conda-forge/cuda
+    - conda-forge/cuda-python
+    - haijieg
