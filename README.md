@@ -249,4 +249,5 @@ Feedstock Maintainers
 
 * [@conda-forge/cuda](https://github.com/orgs/conda-forge/teams/cuda/)
 * [@conda-forge/cuda-python](https://github.com/orgs/conda-forge/teams/cuda-python/)
+* [@haijieg](https://github.com/haijieg/)
 
