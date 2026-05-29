@@ -1,6 +1,6 @@
 context:
   name: cutile-python
-  version: "1.2.0"
+  version: "1.3.0"
 
 package:
   name: ${{ name }}
@@ -8,7 +8,7 @@ package:
 
 source:
   url: https://github.com/NVIDIA/cutile-python/archive/refs/tags/v${{ version }}.tar.gz
-  sha256: e9e9490d5fddd8ad0a9e8e28e42b826838de4ede6fdbce6552be7ce2d75df4e5
+  sha256: 5606e5347ddc41bc395614216857dea79ef9ff2f7bc39a5d8cee89f25deaa9f9
   patches:
     - patches/0001-Remove-nostdlib-flags-to-allow-linking-glibc.patch
 
