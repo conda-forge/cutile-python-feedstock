@@ -8,11 +8,11 @@ link against it. This removes -nostdlib and -fno-builtin flags that
 conflict with conda-forge's compiler flags (e.g. -fstack-protector).
 
 ---
- cext/CMakeLists.txt | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ cext/CMakeLists.txt | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
 diff --git a/cext/CMakeLists.txt b/cext/CMakeLists.txt
-index 7e032f5..a40b0ce 100644
+index 31fc2a8..6741956 100644
 --- a/cext/CMakeLists.txt
 +++ b/cext/CMakeLists.txt
 @@ -10,8 +10,7 @@ if (MSVC)
@@ -22,11 +22,11 @@ index 7e032f5..a40b0ce 100644
 -    # /NODEFAULTLIB and /NOENTRY to disable dependency on runtime lib msvcrt.dll
 -    set(cext_link_flags /NODEFAULTLIB /NOENTRY)
 +    set(cext_link_flags "")
- else()
-     set(cext_compile_flags -fno-exceptions -fno-rtti -fPIC -fvisibility=hidden)
-     set(cext_link_flags ${cext_compile_flags})
-@@ -36,19 +35,19 @@ add_library(_cext_static STATIC
-     tile_kernel.cpp
+     # set Py_GIL_DISABLED macro, at it is not defined automatically on Windows
+     execute_process(
+         COMMAND ${Python_EXECUTABLE} -c
+@@ -57,9 +56,9 @@ add_library(_cext_static STATIC
+     xla_ffi_py.cpp
      )
  
 -target_compile_options(_cext_static PUBLIC ${cext_compile_flags} ${nostdlib_flags})
@@ -37,19 +37,23 @@ index 7e032f5..a40b0ce 100644
  
  
  # Build a Python extension
- 
+@@ -67,6 +66,6 @@ target_link_options(_cext_static PUBLIC ${cext_link_flags} ${nostdlib_flags})
  add_library(_cext MODULE module.cpp)
  
 -target_compile_options(_cext PUBLIC ${cext_compile_flags} ${nostdlib_flags})
 +target_compile_options(_cext PUBLIC ${cext_compile_flags})
  target_include_directories(_cext PRIVATE ${cext_include_dirs})
- target_link_libraries(_cext PUBLIC _cext_static ${Python_LIBRARIES})
+ if (MSVC)
+     # on windows linker resolve symbols eagerly so we must explicitly provide libpython.so
+@@ -78,6 +77,6 @@ else()
+     target_link_libraries(_cext PUBLIC _cext_static)
+ endif()
 -target_link_options(_cext PUBLIC ${cext_link_flags} ${nostdlib_flags})
 +target_link_options(_cext PUBLIC ${cext_link_flags})
  
  set_target_properties(_cext PROPERTIES SKIP_BUILD_RPATH TRUE)
  
-@@ -65,9 +64,9 @@ endif()
+@@ -93,9 +92,9 @@ endif()
  
  add_library(_cext_shared SHARED module.cpp)
  target_link_libraries(_cext_shared _cext_static ${Python_LIBRARIES} ${asan_library})
@@ -63,4 +67,3 @@ index 7e032f5..a40b0ce 100644
  
 -- 
 2.48.1
-
